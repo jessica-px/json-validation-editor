@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { FileDataItem } from './types';
+import { FileDataItem } from '../../utils/fileData.types';
 
 type FileDataContextType = {
   fileData: {[key: string]: FileDataItem},

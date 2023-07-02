@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { FileContext } from './fileContext';
-import { FileData } from './types';
+import { FileData } from '../../utils/fileData.types';
 
 const FileNavPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};

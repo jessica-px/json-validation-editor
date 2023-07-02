@@ -4,7 +4,7 @@ import { FileNavPanel } from './fileNavPanel';
 import { WarningPanel } from './warningPanel';
 import { FileContext } from './fileContext';
 import { JsonPanel } from './jsonPanel';
-import { FileData } from './types';
+import { FileData } from '../../utils/fileData.types';
 import { getJsonErrors } from '../../utils/validateJson/validateJson';
 
 const TitleBar = styled.div`
