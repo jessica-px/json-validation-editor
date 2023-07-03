@@ -2,6 +2,8 @@ import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { FileContext } from './fileContext';
 import { FileData } from '../../utils/fileData.types';
+import { getFileDataHierarchy } from '../../utils/getFileDataHierarchy';
+import { FileExplorer }from './fileExplorer/fileExplorer';
 
 const FileNavPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
@@ -32,6 +34,10 @@ const FileButton = styled.button<{ isSelected: boolean }>`
   }
 `
 
+const DirHeader = styled.div<{ indent: number}>`
+  padding-left: ${(props) => `${props.indent}px`};
+`
+
 const getFileDisplayName = (filePath: string, fileData: FileData) => {
   if (fileData[filePath].hasChanges) {
     return fileData[filePath].name + " *";
@@ -41,22 +47,12 @@ const getFileDisplayName = (filePath: string, fileData: FileData) => {
 
 export const FileNavPanel = () => {
   const { fileData, selectedFile, setSelectedFile } = useContext(FileContext);
+  const fileHierarchy = getFileDataHierarchy(fileData);
 
   return (
     <FileNavPanelStyle>
       <ListHeader>my-jsons</ListHeader>
-      {Object.keys(fileData).map(filePath => {
-        const fileName = fileData[filePath].name;
-        return (
-          <FileButton
-            key={fileName}
-            onClick={() => setSelectedFile(filePath)}
-            isSelected={selectedFile === filePath}
-          >
-            {getFileDisplayName(filePath, fileData)}
-          </FileButton>
-        )
-      })}
+      <FileExplorer hierarchicalFileData={fileHierarchy} indentAmount={12} depth={1}/>
     </FileNavPanelStyle>
   )
 }
