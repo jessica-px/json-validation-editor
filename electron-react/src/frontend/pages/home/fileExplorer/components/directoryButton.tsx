@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { styled } from "styled-components";
-import { selectors } from '../../../../redux/dirDataSlice';
-import { useAppSelector } from '../../../../redux/hooks';
+import { selectors } from '@redux/dirDataSlice';
+import { useAppSelector } from '@redux/hooks';
 
 const DirectoryButtonStyle = styled.button<{ indent: number}>`
   color: ${(props) => props.theme.dark600};

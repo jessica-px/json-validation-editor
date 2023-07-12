@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { JsonError } from '../../../shared/validateJson/validateJson';
-import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { selectAllWithErrors, actions } from '../../redux/dirDataSlice';
+import { JsonError } from '@shared/validateJson/validateJson';
+import { useAppSelector, useAppDispatch } from '@redux/hooks';
+import { selectAllWithErrors, actions } from '@redux/dirDataSlice';
 
 const WarningPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};

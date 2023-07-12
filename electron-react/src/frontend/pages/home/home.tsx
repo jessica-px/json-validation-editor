@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { useDispatch } from 'react-redux'
+import { DirectoryItem } from '@shared/types';
+import { actions } from '@redux/dirDataSlice';
 import { FileNavPanel } from './fileNavPanel';
 import { WarningPanel } from './warningPanel';
 import { JsonPanel } from './jsonPanel';
-import { DirectoryItem } from '../../../shared/types';
-import { actions } from '../../redux/dirDataSlice';
-import { useDispatch } from 'react-redux'
 
 const TitleBar = styled.div`
   width: 100%;
@@ -39,6 +39,7 @@ export const HomePage = () => {
   useEffect(() => {
     electronApi.getDirData(jsonDirectoryPath)
       .then((returnedDirItems: DirectoryItem[]) => {
+        // upgrade this to an "addMany" action, for performance
         returnedDirItems.forEach(item => dispatch(actions.addOne(item)))
       });
 

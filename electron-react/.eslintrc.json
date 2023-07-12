@@ -21,5 +21,15 @@
     "space-infix-ops": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": "off"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
   }
 }

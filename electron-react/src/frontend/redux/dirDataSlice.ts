@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import type { DirFile, DirectoryItem } from '../../shared/types';
-import { getJsonErrors } from '../../shared/validateJson/validateJson';
+import type { DirFile, DirectoryItem } from '@shared/types';
+import { getJsonErrors } from '@shared/validateJson/validateJson';
 
 export const dirItemsAdaptor = createEntityAdapter<DirectoryItem>({
   selectId: (item) => item.path,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { styled } from "styled-components";
-import { DirFile } from "../../../../../shared/types";
-import { actions, selectors } from '../../../../redux/dirDataSlice';
-import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
+import { DirFile } from "@shared/types";
+import { actions, selectors } from '@redux/dirDataSlice';
+import { useAppSelector, useAppDispatch } from '@redux/hooks';
 
 const FileButtonStyle = styled.button<{ selected: boolean, indent: number}>`
   color: ${(props) => props.theme.dark600};

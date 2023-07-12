@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
+import { Provider } from 'react-redux'
 import { HomePage } from './pages/home/home';
 import { setupStore } from './redux/store'
-import { Provider } from 'react-redux'
 
 const theme = {
   dark100: '#1a1625', // For body background color

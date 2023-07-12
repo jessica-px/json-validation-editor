@@ -1,5 +1,5 @@
 import { dialog, IpcMainInvokeEvent } from 'electron';
-import { DirectoryItem } from '../../shared/types';
+import { DirectoryItem } from '@shared/types';
 import { promises as fsp } from 'fs';
 
 export async function openFile () {

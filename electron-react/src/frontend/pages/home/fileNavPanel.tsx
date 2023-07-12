@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { FileExplorer }from './fileExplorer/fileExplorer';
-import { selectors } from '../../redux/dirDataSlice';
-import { useAppSelector } from '../../redux/hooks';
+import { selectors } from '@redux/dirDataSlice';
+import { useAppSelector } from '@redux/hooks';
 
 const FileNavPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};

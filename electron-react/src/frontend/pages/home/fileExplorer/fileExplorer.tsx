@@ -1,9 +1,9 @@
 import { styled } from "styled-components";
-import { DirectoryItem } from "../../../../shared/types";
+import { selectors } from '@redux/dirDataSlice';
+import { useAppSelector } from '@redux/hooks'
+import { DirectoryItem } from "@shared/types";
 import { FileButton } from './components/fileButton';
 import { DirectoryButton } from './components/directoryButton';
-import { selectors } from '../../../redux/dirDataSlice';
-import { useAppSelector } from '../../../redux/hooks'
 
 const FileExplorerContainer = styled.div`
   display: flex;

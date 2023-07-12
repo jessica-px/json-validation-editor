@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import AceEditor from "react-ace";
 import { styled } from 'styled-components';
-import { useAppSelector, useAppDispatch } from '../../../frontend/redux/hooks';
-import { actions, selectors } from '../../../frontend/redux/dirDataSlice';
+import { useAppSelector, useAppDispatch } from '@redux/hooks';
+import { actions, selectors } from '@redux/dirDataSlice';
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-twilight";
