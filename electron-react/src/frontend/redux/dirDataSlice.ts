@@ -54,14 +54,14 @@ const dirDataSlice = createSlice({
 export const actions = dirDataSlice.actions;
 
 // Export the customized selectors for this adapter using `getSelectors`
-export const {
+const {
   selectAll,
   selectById,
   selectIds,
   // Pass in a selector that returns the posts slice of state
 } = dirItemsAdaptor.getSelectors<RootState>(state => state.dirData)
 
-export const selectAllChildren = createSelector(
+const selectAllChildren = createSelector(
   [selectById, selectAll],
   (targetItem, allDirItems) => {
     if (targetItem.type === 'dir') {
@@ -70,21 +70,21 @@ export const selectAllChildren = createSelector(
   }
 )
 
-export const selectAllItemsAtPath = (rootPath: string) => createSelector(
+const selectAllItemsAtPath = (rootPath: string) => createSelector(
   [selectAll],
   (allDirItems) => {
     return allDirItems.filter(item => item.path == rootPath + '/' + item.name);
   }
 )
 
-export const selectAllWithErrors = createSelector(
+const selectAllWithErrors = createSelector(
   [selectAll],
   (allDirItems) => {
     return allDirItems.filter(item => item.type === 'file' && item.jsonErrors.length > 0) as DirFile[];
   }
 )
 
-export const selectSelectedFile = (state: RootState): DirFile | null => {
+const selectSelectedFile = (state: RootState): DirFile | null => {
   const selectedPath = state.dirData.selectedFile;
   if (!!selectedPath && state.dirData.entities[selectedPath].type === 'file') {
     return state.dirData.entities[selectedPath] as DirFile;
@@ -92,7 +92,7 @@ export const selectSelectedFile = (state: RootState): DirFile | null => {
   return null;
 }
 
-export const selectSelectedLineNumber = (state: RootState): number | null => {
+const selectSelectedLineNumber = (state: RootState): number | null => {
   return state.dirData.selectedLineNumber;
 }
 

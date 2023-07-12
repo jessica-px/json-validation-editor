@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { JsonError } from '@shared/validateJson/validateJson';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
-import { selectAllWithErrors, actions } from '@redux/dirDataSlice';
+import { selectors, actions } from '@redux/dirDataSlice';
 
 const WarningPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
@@ -118,7 +118,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
 
 export const WarningPanel = () => {
   const [numErrors, setNumErrors] = useState<number>(0);
-  const filesWithErrors = useAppSelector(selectAllWithErrors);
+  const filesWithErrors = useAppSelector(selectors.selectAllWithErrors);
 
   useEffect(() => {
     let numErrorsFound = 0;
