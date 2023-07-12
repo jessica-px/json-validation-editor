@@ -3,7 +3,7 @@ import { FrontendApi, ApiKey } from './shared/api';
 
 const frontendApi: FrontendApi = {
   [ApiKey.selectDirectory]: () => ipcRenderer.invoke(ApiKey.selectDirectory),
-  [ApiKey.getFilesInDir]: (dirName: string) => ipcRenderer.invoke(ApiKey.getFilesInDir, dirName)
+  [ApiKey.getDirData]: (dirName: string) => ipcRenderer.invoke(ApiKey.getDirData, dirName),
 }
 
 contextBridge.exposeInMainWorld('electronApi', frontendApi);

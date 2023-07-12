@@ -1,6 +1,7 @@
-import { useState, useContext } from 'react';
-import { FileContext } from '../../fileContext';
+import { useState, useEffect } from 'react';
 import { styled } from "styled-components";
+import { selectors } from '../../../../redux/dirDataSlice';
+import { useAppSelector } from '../../../../redux/hooks';
 
 const DirectoryButtonStyle = styled.button<{ indent: number}>`
   color: ${(props) => props.theme.dark600};
@@ -22,14 +23,22 @@ const DirectoryButtonStyle = styled.button<{ indent: number}>`
 type DirectoryButtonProps = {
   indent: number,
   directoryName: string,
+  path: string,
   nestedFileExplorer: React.ReactElement
 }
 
 export const DirectoryButton = (props: DirectoryButtonProps): React.ReactElement => {
-  const { selectedFile } = useContext(FileContext);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const arrow = isOpen ? '▼' : '▶';
   const label = `${arrow} 📁 ${props.directoryName}`;
+
+  const selectedFile = useAppSelector(selectors.selectSelectedFile);
+
+  useEffect(() => {
+    if (selectedFile && selectedFile.path.includes(props.path)) {
+      setIsOpen(true);
+    }
+  }, [selectedFile])
 
   return (
     <>

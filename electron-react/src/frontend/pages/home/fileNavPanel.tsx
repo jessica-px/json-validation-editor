@@ -1,9 +1,7 @@
-import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { FileContext } from './fileContext';
-import { FileData } from '../../utils/fileData.types';
-import { getFileDataHierarchy } from '../../utils/getFileDataHierarchy';
 import { FileExplorer }from './fileExplorer/fileExplorer';
+import { selectors } from '../../redux/dirDataSlice';
+import { useAppSelector } from '../../redux/hooks';
 
 const FileNavPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
@@ -22,37 +20,17 @@ const ListHeader = styled.h4`
   margin: 0;
 `
 
-const FileButton = styled.button<{ isSelected: boolean }>`
-  border: none;
-  background-color: ${(props) => props.isSelected ? props.theme.dark300 : props.theme.dark200};
-  color: ${(props) => props.theme.dark600};
-  padding: 8px 16px;
-  text-align: left;
-  border-radius: 5px;
-  &:hover {
-    background-color: ${(props) => props.theme.dark300};
-  }
-`
-
-const DirHeader = styled.div<{ indent: number}>`
-  padding-left: ${(props) => `${props.indent}px`};
-`
-
-const getFileDisplayName = (filePath: string, fileData: FileData) => {
-  if (fileData[filePath].hasChanges) {
-    return fileData[filePath].name + " *";
-  }
-  return fileData[filePath].name;
+type FileNavPanelProps = {
+  jsonDirectoryPath: string
 }
 
-export const FileNavPanel = () => {
-  const { fileData, selectedFile, setSelectedFile } = useContext(FileContext);
-  const fileHierarchy = getFileDataHierarchy(fileData);
+export const FileNavPanel = (props: FileNavPanelProps) => {
+  const topLevelItems = useAppSelector(selectors.selectAllItemsAtPath(props.jsonDirectoryPath))
 
   return (
     <FileNavPanelStyle>
       <ListHeader>my-jsons</ListHeader>
-      <FileExplorer hierarchicalFileData={fileHierarchy} indentAmount={12} depth={1}/>
+      <FileExplorer contents={topLevelItems} indentAmount={12} depth={1}/>
     </FileNavPanelStyle>
   )
 }

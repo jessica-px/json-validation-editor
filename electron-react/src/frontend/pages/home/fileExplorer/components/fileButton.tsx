@@ -1,6 +1,8 @@
-import { useContext } from 'react';
-import { FileContext } from '../../fileContext';
+import { useEffect, useState } from 'react';
 import { styled } from "styled-components";
+import { DirFile } from "../../../../../shared/types";
+import { actions, selectors } from '../../../../redux/dirDataSlice';
+import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
 
 const FileButtonStyle = styled.button<{ selected: boolean, indent: number}>`
   color: ${(props) => props.theme.dark600};
@@ -19,20 +21,28 @@ const FileButtonStyle = styled.button<{ selected: boolean, indent: number}>`
 
 type FileButtonProps = {
   indent: number,
-  fileName: string,
-  filePath: string
+  fileData: DirFile,
+  path: string
 }
 
 export const FileButton = (props: FileButtonProps) => {
-  const { selectedFile, setSelectedFile } = useContext(FileContext);
+  const dispatch = useAppDispatch();
+  const [buttonLabel, setButtonLabel] = useState('');
+  const selectedFile = useAppSelector(selectors.selectSelectedFile);
+  const isSelected = selectedFile && selectedFile.path === props.path;
+
+  // whenever file updates, check to see if we should add/remove button * to show changes
+  useEffect(() => {
+    setButtonLabel(props.fileData.hasChanges ? `${props.fileData.name}*` : props.fileData.name);
+  }, [props.fileData])
 
   return (
     <FileButtonStyle
       indent={props.indent}
-      selected={props.filePath === selectedFile}
-      onClick={() => setSelectedFile(props.filePath)}
+      selected={isSelected}
+      onClick={() => dispatch(actions.setSelectedFile(props.path))}
     >
-      {props.fileName}
+      {buttonLabel}
     </FileButtonStyle>
   )
 }

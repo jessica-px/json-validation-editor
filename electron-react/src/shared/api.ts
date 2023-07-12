@@ -1,8 +1,8 @@
 import { IpcMainInvokeEvent } from 'electron';
 
 export enum ApiKey {
-  getFilesInDir = "getFilesInDir",
-  selectDirectory = "selectDirectory"
+  selectDirectory = "selectDirectory",
+  getDirData = "getDirData"
 }
 
 export type BackendApi = {

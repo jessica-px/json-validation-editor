@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
-import { HierarchicalFileData } from "../../../utils/fileData.types";
+import { DirectoryItem } from "../../../../shared/types";
 import { FileButton } from './components/fileButton';
 import { DirectoryButton } from './components/directoryButton';
+import { selectors } from '../../../redux/dirDataSlice';
+import { useAppSelector } from '../../../redux/hooks'
 
 const FileExplorerContainer = styled.div`
   display: flex;
@@ -9,37 +11,40 @@ const FileExplorerContainer = styled.div`
 `
 
 type FileExplorerProps = {
-  hierarchicalFileData: HierarchicalFileData,
+  contents: DirectoryItem[],
   depth: number,
   indentAmount: number
 };
 
-export const FileExplorer = ({ hierarchicalFileData, indentAmount, depth }: FileExplorerProps): React.ReactElement => {
-  const nodes = Object.keys(hierarchicalFileData);
-
+export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
   return (
     <FileExplorerContainer>
       {
-        nodes.map(nodeKey => {
-          const nodeData = hierarchicalFileData[nodeKey];
-          const indent = depth * indentAmount;
+        !!props.contents && props.contents.map(dirItem => {
+          const indent = props.depth * props.indentAmount;
 
-          if (typeof nodeData === 'object') {
-          // If directory
+          if (!dirItem) {
+            return;
+          } else if (dirItem.type === 'file') {
+            return <FileButton
+              key={dirItem.path}
+              path={dirItem.path}
+              fileData={dirItem}
+              indent={indent}
+            />;
+          } else {
+            const children = useAppSelector(state => selectors.selectAllChildren(state, dirItem.path))
+
             return (
               <DirectoryButton
-                directoryName={nodeKey}
+                key={dirItem.path}
+                path={dirItem.path}
+                directoryName={dirItem.name}
                 indent={indent}
                 nestedFileExplorer={
-                  <FileExplorer hierarchicalFileData={nodeData} depth={depth + 1} indentAmount={indentAmount}/>
+                  <FileExplorer contents={children} depth={props.depth + 1} indentAmount={props.indentAmount}/>
                 }
               />
-            )
-          } else {
-          // If filename
-            const filePath = nodeData as string;
-            return (
-              <FileButton fileName={nodeKey} filePath={filePath} indent={indent}/>
             )
           }
         })

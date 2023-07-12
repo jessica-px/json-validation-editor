@@ -1,7 +1,8 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import AceEditor from "react-ace";
 import { styled } from 'styled-components';
-import { FileContext } from './fileContext';
+import { useAppSelector, useAppDispatch } from '../../../frontend/redux/hooks';
+import { actions, selectors } from '../../../frontend/redux/dirDataSlice';
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-twilight";
@@ -14,43 +15,42 @@ const JsonPanelStyle = styled.div`
   flex-direction: column;
 `
 
-type JsonPanelProps = {
-  updateFileContent: (fileName: string, newContent: string) => void
-}
-
-export const JsonPanel = ({ updateFileContent }: JsonPanelProps) => {
-  const { selectedFile, fileData, selectedLine } = useContext(FileContext);
+export const JsonPanel = () => {
+  const dispatch = useAppDispatch();
   const editorRef = useRef();
 
-  const fileDataItem = fileData[selectedFile];
+  const selectedLineNumber = useAppSelector(selectors.selectSelectedLineNumber)
+  const selectedFile = useAppSelector(selectors.selectSelectedFile)
 
   useEffect(() => {
-    goToLine(selectedLine);
-  }, [selectedLine])
+    goToLine(selectedLineNumber);
+  }, [selectedLineNumber])
 
   const errorsToAnnotations = () => {
-    if (!fileDataItem) {
+    if (!selectedFile) {
       return [];
     }
-    return fileDataItem.jsonErrors.map(error => ({
+    return selectedFile.jsonErrors.map(error => ({
       row: error.lineNumber, column: 0, type: 'error', text: error.message
     }))
   }
 
   const errorsToMarkers = () => {
-    if (!fileDataItem) {
+    if (!selectedFile) {
       return [];
     }
-    return fileDataItem.jsonErrors.map(error => ({
+    return selectedFile.jsonErrors.map(error => ({
       startRow: error.lineNumber, startCol: 0, endRow: error.lineNumber, endCol: 2000, className: 'error-marker', type: 'fullLine'
     }))
   }
 
   const onChange = (newValue: string) => {
-    // only update if it's actually different
-    const oldValue = fileData[selectedFile].jsonString;
+    const oldValue = selectedFile.content;
     if (oldValue !== newValue) {
-      updateFileContent(selectedFile, newValue);
+      dispatch(actions.updateFile({
+        path: selectedFile.path,
+        newContent: newValue
+      }))
     }
   }
 
@@ -63,7 +63,7 @@ export const JsonPanel = ({ updateFileContent }: JsonPanelProps) => {
   return (
     <JsonPanelStyle>
       {!selectedFile && <div>Select a file</div>}
-      {selectedFile && !!fileDataItem && (
+      {!!selectedFile && (
         <AceEditor
           mode="java"
           ref={editorRef}
@@ -72,7 +72,7 @@ export const JsonPanel = ({ updateFileContent }: JsonPanelProps) => {
           debounceChangePeriod={500}
           name="ace-editor"
           editorProps={{ $blockScrolling: true }}
-          value={fileDataItem.jsonString}
+          value={selectedFile.content}
           width='100%'
           height='100%'
           focus={true}

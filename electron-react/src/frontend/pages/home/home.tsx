@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { FileNavPanel } from './fileNavPanel';
 import { WarningPanel } from './warningPanel';
-import { FileContext } from './fileContext';
 import { JsonPanel } from './jsonPanel';
-import { FileData } from '../../utils/fileData.types';
-import { getJsonErrors } from '../../utils/validateJson/validateJson';
+import { DirectoryItem } from '../../../shared/types';
+import { actions } from '../../redux/dirDataSlice';
+import { useDispatch } from 'react-redux'
 
 const TitleBar = styled.div`
   width: 100%;
@@ -33,64 +33,25 @@ export type FileReturnType = {
 }
 
 export const HomePage = () => {
-  const [jsonDirectory] = useState('/Users/themanager/Desktop/jsons');
-  const [fileData, setFileData] = useState<FileData>({});
-  const [fileDataOnDisk, setFileDataOnDisk] = useState<FileData>({});
-  const [selectedLine, setSelectedLine] = useState(0);
-  const [selectedFile, setSelectedFile] = useState<string|null>(null);
+  const dispatch = useDispatch();
+  const [jsonDirectoryPath] = useState('/Users/themanager/Desktop/jsons');
 
   useEffect(() => {
-    const newData: FileData = {};
-
-    electronApi.getFilesInDir(jsonDirectory)
-      .then((returnedFiles: FileReturnType[]) => {
-        returnedFiles.forEach(file => {
-          newData[file.path] = {
-            name: file.name,
-            path: file.path,
-            jsonString: file.content,
-            jsonErrors: getJsonErrors(file.content),
-            hasChanges: false
-          }
-        })
-        setFileData(newData);
-        setFileDataOnDisk(newData);
+    electronApi.getDirData(jsonDirectoryPath)
+      .then((returnedDirItems: DirectoryItem[]) => {
+        returnedDirItems.forEach(item => dispatch(actions.addOne(item)))
       });
 
   }, []);
 
-  const updateFileContent = (fileName: string, newContent: string) => {
-    const contentOnDisk = fileDataOnDisk[fileName].jsonString;
-
-    const newDataItem = {
-      ...fileData[fileName],
-      jsonString: newContent,
-      jsonErrors: getJsonErrors(newContent),
-      hasChanges: newContent !== contentOnDisk
-    };
-    const newFileData = { ...fileData, [fileName]: newDataItem };
-
-    setFileData(newFileData);
-  }
-
   return (
-    <FileContext.Provider value={{
-      fileData,
-      setFileData,
-      selectedFile,
-      setSelectedFile,
-      selectedLine,
-      setSelectedLine,
-      jsonDirectory
-    }}>
-      <Layout>
-        <TitleBar />
-        <Panels>
-          <FileNavPanel />
-          <JsonPanel updateFileContent={updateFileContent}/>
-          <WarningPanel />
-        </Panels>
-      </Layout>
-    </FileContext.Provider>
+    <Layout>
+      <TitleBar />
+      <Panels>
+        <FileNavPanel jsonDirectoryPath={jsonDirectoryPath} />
+        <JsonPanel />
+        <WarningPanel />
+      </Panels>
+    </Layout>
   )
 }

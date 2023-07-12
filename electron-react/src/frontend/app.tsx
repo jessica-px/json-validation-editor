@@ -1,6 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { HomePage } from './pages/home/home';
+import { setupStore } from './redux/store'
+import { Provider } from 'react-redux'
 
 const theme = {
   dark100: '#1a1625', // For body background color
@@ -16,9 +18,11 @@ const theme = {
 };
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <HomePage />
-  </ThemeProvider>
+  <Provider store={setupStore()}>
+    <ThemeProvider theme={theme}>
+      <HomePage />
+    </ThemeProvider>
+  </Provider>
 )
 
 const container = document.getElementById("root");

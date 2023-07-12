@@ -1,4 +1,5 @@
 import { dialog, IpcMainInvokeEvent } from 'electron';
+import { DirectoryItem } from '../../shared/types';
 import { promises as fsp } from 'fs';
 
 export async function openFile () {
@@ -21,25 +22,42 @@ export type FileReturnType = {
   content: string
 }
 
-export const getFilesInDir = async (_: IpcMainInvokeEvent, ...args: string[]): Promise<FileReturnType[]> => {
+export const getDirData = async (_: IpcMainInvokeEvent, ...args: string[]): Promise<DirectoryItem[]> => {
   const directoryName = args[0];
 
-  const recursiveGetFilesInDir = async (dirName: string): Promise<FileReturnType[]> => {
-    let files: FileReturnType[] = [];
+  const recursiveGetFilesInDir = async (dirName: string): Promise<DirectoryItem[]> => {
+    let files: DirectoryItem[] = [];
     const items = await fsp.readdir(dirName, { withFileTypes: true,  });
     for (const item of items) {
+      const filePath = `${dirName}/${item.name}`;
+
       if (item.isDirectory()) {
-        files = [
-          ...files,
-          ...(await recursiveGetFilesInDir(`${dirName}/${item.name}`)),
-        ];
-      } else if (item.name.includes('.json')) {
-        const filePath = `${dirName}/${item.name}`;
-        const fileData = await fsp.readFile(filePath);
-        files.push({
+        const newItem: DirectoryItem = {
+          type: 'dir',
           name: item.name,
           path: filePath,
-          content: fileData.toString()
+          childPaths: []
+        };
+
+        const childFiles = await recursiveGetFilesInDir(filePath);
+        const children = childFiles.filter(file => file.path === filePath + '/' + file.name)
+        const childPaths = children.map(file => file.path);
+        newItem.childPaths = childPaths;
+
+        files = [
+          newItem,
+          ...files,
+          ...childFiles,
+        ];
+      } else if (item.name.includes('.json')) {
+        const fileData = await fsp.readFile(filePath);
+        files.push({
+          type: 'file',
+          name: item.name,
+          path: filePath,
+          content: fileData.toString(),
+          jsonErrors: [],
+          hasChanges: false
         })
       } else {
         continue;

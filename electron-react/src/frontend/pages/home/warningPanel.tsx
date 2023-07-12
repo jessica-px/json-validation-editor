@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { FileContext } from './fileContext';
-import { JsonError } from '../../utils/validateJson/validateJson';
+import { JsonError } from '../../../shared/validateJson/validateJson';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { selectAllWithErrors, actions } from '../../redux/dirDataSlice';
 
 const WarningPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
@@ -80,14 +81,17 @@ const ErrorText = ({ lineNumber, message, onClick }: ErrorTextProps) => {
 type FileInfoProps = {
   fileName: string,
   filePath: string,
-  errors: JsonError[],
-  setSelectedLine: React.Dispatch<React.SetStateAction<number>>,
-  setSelectedFile: React.Dispatch<React.SetStateAction<string>>,
+  errors: JsonError[]
 }
 
-const FileInfo = ({ fileName, filePath, errors, setSelectedFile, setSelectedLine }: FileInfoProps) => {
+const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(true);
   const symbol = isOpen ? '▼' : '▶';
+
+  const setSelectedLineNumber = (lineNumber: number) => {
+    dispatch(actions.setSelectedLineNumber(lineNumber))
+  }
 
   return (
     <FileInfoContainter>
@@ -103,8 +107,8 @@ const FileInfo = ({ fileName, filePath, errors, setSelectedFile, setSelectedLine
           lineNumber={error.lineNumber}
           message={error.message}
           onClick={() => {
-            setSelectedLine(error.lineNumber + 1);
-            setSelectedFile(filePath)
+            setSelectedLineNumber(error.lineNumber + 1);
+            dispatch(actions.setSelectedFile(filePath))
           }}
         />
       ))}
@@ -113,31 +117,29 @@ const FileInfo = ({ fileName, filePath, errors, setSelectedFile, setSelectedLine
 }
 
 export const WarningPanel = () => {
-  const { fileData, setSelectedFile, setSelectedLine } = useContext(FileContext);
   const [numErrors, setNumErrors] = useState<number>(0);
+  const filesWithErrors = useAppSelector(selectAllWithErrors);
 
   useEffect(() => {
     let numErrorsFound = 0;
-    for (const fileName of Object.keys(fileData)) {
-      numErrorsFound += fileData[fileName].jsonErrors.length;
+    for (const file of filesWithErrors) {
+      numErrorsFound += file.jsonErrors.length;
     }
     setNumErrors(numErrorsFound);
-  }, [fileData])
+  }, [filesWithErrors])
 
   return (
     <WarningPanelStyle>
       <PanelHeader>Total Errors: {numErrors}</PanelHeader>
-      {Object.keys(fileData)
-        .filter(filePath => (
-          fileData[filePath].jsonErrors.length > 0
-        )).map(filePath => (
+      {filesWithErrors
+        .filter(file => (
+          file.jsonErrors.length > 0
+        )).map(file => (
           <FileInfo
-            key={filePath}
-            fileName={fileData[filePath].name}
-            filePath={filePath}
-            errors={fileData[filePath].jsonErrors}
-            setSelectedLine={setSelectedLine}
-            setSelectedFile={setSelectedFile}
+            key={file.path}
+            fileName={file.name}
+            filePath={file.path}
+            errors={file.jsonErrors}
           />
         ))
       }

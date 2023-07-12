@@ -3,7 +3,7 @@ import { ApiKey, BackendApi } from '../../shared/api';
 
 const backendApi: BackendApi = {
   [ApiKey.selectDirectory]: FileSystemAPI.selectDirectory,
-  [ApiKey.getFilesInDir]: FileSystemAPI.getFilesInDir,
+  [ApiKey.getDirData]: FileSystemAPI.getDirData,
 }
 
 export default backendApi;
