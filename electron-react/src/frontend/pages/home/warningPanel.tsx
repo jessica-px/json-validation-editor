@@ -13,6 +13,7 @@ const WarningPanelStyle = styled.div`
   width: 230px;
   padding: 12px;
   font-size: ${(props) => props.theme.fontSizeSmall};
+  overflow: scroll;
 `;
 
 const PanelHeader = styled.h4`

@@ -12,6 +12,7 @@ const FileNavPanelStyle = styled.div`
   width: 230px;
   padding: 12px;
   font-size: ${(props) => props.theme.fontSizeSmall};
+  overflow: scroll;
 `;
 
 const ListHeader = styled.h4`
