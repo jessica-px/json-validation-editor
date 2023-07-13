@@ -26,12 +26,13 @@ export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
           if (!dirItem) {
             return;
           } else if (dirItem.type === 'file') {
-            return <FileButton
-              key={dirItem.path}
-              path={dirItem.path}
-              fileData={dirItem}
-              indent={indent}
-            />;
+            return (
+              <FileButton
+                key={dirItem.path}
+                path={dirItem.path}
+                indent={indent}
+              />
+            );
           } else {
             const children = useAppSelector(state => selectors.selectAllChildren(state, dirItem.path))
 
