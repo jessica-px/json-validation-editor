@@ -11,17 +11,16 @@ const FileExplorerContainer = styled.div`
 `
 
 type FileExplorerProps = {
-  contents: DirectoryItem[],
-  depth: number,
-  indentAmount: number
+  contents: DirectoryItem[]
 };
 
 export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
+  const indentAmount = 10;
+
   return (
     <FileExplorerContainer>
       {
         !!props.contents && props.contents.map(dirItem => {
-          const indent = props.depth * props.indentAmount;
 
           if (!dirItem) {
             return;
@@ -30,7 +29,7 @@ export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
               <FileButton
                 key={dirItem.path}
                 path={dirItem.path}
-                indent={indent}
+                indent={indentAmount}
               />
             );
           } else {
@@ -41,9 +40,9 @@ export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
                 key={dirItem.path}
                 path={dirItem.path}
                 directoryName={dirItem.name}
-                indent={indent}
+                indent={indentAmount}
                 nestedFileExplorer={
-                  <FileExplorer contents={children} depth={props.depth + 1} indentAmount={props.indentAmount}/>
+                  <FileExplorer contents={children} />
                 }
               />
             )

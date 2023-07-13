@@ -31,7 +31,7 @@ export const FileNavPanel = (props: FileNavPanelProps) => {
   return (
     <FileNavPanelStyle>
       <ListHeader>my-jsons</ListHeader>
-      <FileExplorer contents={topLevelItems} indentAmount={12} depth={1}/>
+      <FileExplorer contents={topLevelItems} />
     </FileNavPanelStyle>
   )
 }

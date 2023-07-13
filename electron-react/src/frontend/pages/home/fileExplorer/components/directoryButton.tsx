@@ -9,7 +9,6 @@ const DirectoryButtonStyle = styled.button<{ indent: number}>`
   border: none;
   border-radius: 5px;
   margin: 0;
-  margin-left: ${(props) => `${props.indent - 4}px`};
   padding: 4px;
   background-color: ${(props) => props.theme.dark200};
   color: ${(props) => props.theme.dark600};
@@ -18,6 +17,12 @@ const DirectoryButtonStyle = styled.button<{ indent: number}>`
   &:hover {
     background-color: ${(props) => props.theme.dark300};
   }
+`
+
+const DirectoryChildrenContainer = styled.div<{ indent: number}>`
+  margin-left: ${(props) => `${props.indent}px`};
+  padding-left: 4px;
+  border-left: 1px solid ${(props) => props.theme.dark300};
 `
 
 type DirectoryButtonProps = {
@@ -48,7 +53,9 @@ export const DirectoryButton = (props: DirectoryButtonProps): React.ReactElement
       >
         {label}
       </DirectoryButtonStyle>
-      {isOpen && props.nestedFileExplorer}
+      <DirectoryChildrenContainer indent={props.indent}>
+        {isOpen && props.nestedFileExplorer}
+      </DirectoryChildrenContainer>
     </>
   )
 }
