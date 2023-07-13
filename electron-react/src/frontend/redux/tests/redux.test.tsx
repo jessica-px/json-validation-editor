@@ -31,7 +31,7 @@ test('renders', async () => {
     name: 'cat.json',
     path: 'mobs/cat.json',
     content: '{"hello": "cat"}',
-    hasChanges: false,
+    contentOnDisk: '{"hello": "cat"}',
     jsonErrors: []
   }))
   store.dispatch(actions.addOne({
@@ -39,7 +39,7 @@ test('renders', async () => {
     name: 'bat.json',
     path: 'mobs/bat.json',
     content: '{"hello": "bat"}',
-    hasChanges: false,
+    contentOnDisk: '{"hello": "bat"}',
     jsonErrors: []
   }))
 

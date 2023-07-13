@@ -5,7 +5,7 @@ export type DirFile = {
   name: string,
   path: string,
   content: string,
-  hasChanges: boolean,
+  contentOnDisk: string,
   jsonErrors: JsonError[]
 }
 

@@ -41,11 +41,9 @@ const dirDataSlice = createSlice({
       const existingDirItem = state.entities[path]
       if (existingDirItem && existingDirItem.type === 'file') {
         const newJsonErrors = getJsonErrors(newContent);
-        const hasChanges = true; // dummy value
 
         existingDirItem.content = newContent
         existingDirItem.jsonErrors = newJsonErrors
-        existingDirItem.hasChanges = hasChanges
       }
     }
   }
@@ -60,6 +58,15 @@ const {
   selectIds,
   // Pass in a selector that returns the posts slice of state
 } = dirItemsAdaptor.getSelectors<RootState>(state => state.dirData)
+
+const selectFileById = createSelector(
+  [selectById],
+  (targetItem) => {
+    if (targetItem.type === 'file') {
+      return targetItem as DirFile;
+    }
+  }
+)
 
 const selectAllChildren = createSelector(
   [selectById, selectAll],
@@ -100,6 +107,7 @@ export const selectors = {
   selectAll,
   selectById,
   selectIds,
+  selectFileById,
   selectAllChildren,
   selectAllItemsAtPath,
   selectAllWithErrors,

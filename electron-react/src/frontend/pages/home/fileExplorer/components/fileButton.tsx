@@ -21,7 +21,6 @@ const FileButtonStyle = styled.button<{ selected: boolean, indent: number}>`
 
 type FileButtonProps = {
   indent: number,
-  fileData: DirFile,
   path: string
 }
 
@@ -29,12 +28,14 @@ export const FileButton = (props: FileButtonProps) => {
   const dispatch = useAppDispatch();
   const [buttonLabel, setButtonLabel] = useState('');
   const selectedFile = useAppSelector(selectors.selectSelectedFile);
+  const fileData = useAppSelector((state) => selectors.selectFileById(state, props.path));
   const isSelected = selectedFile && selectedFile.path === props.path;
 
   // whenever file updates, check to see if we should add/remove button * to show changes
   useEffect(() => {
-    setButtonLabel(props.fileData.hasChanges ? `${props.fileData.name}*` : props.fileData.name);
-  }, [props.fileData])
+    const hasChanges = fileData.content !== fileData.contentOnDisk;
+    setButtonLabel(hasChanges ? `${fileData.name}*` : fileData.name);
+  }, [fileData])
 
   return (
     <FileButtonStyle

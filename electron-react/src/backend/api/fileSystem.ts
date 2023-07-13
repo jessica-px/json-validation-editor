@@ -51,13 +51,14 @@ export const getDirData = async (_: IpcMainInvokeEvent, ...args: string[]): Prom
         ];
       } else if (item.name.includes('.json')) {
         const fileData = await fsp.readFile(filePath);
+        const content = fileData.toString();
         files.push({
           type: 'file',
           name: item.name,
           path: filePath,
-          content: fileData.toString(),
-          jsonErrors: [],
-          hasChanges: false
+          content: content,
+          contentOnDisk: content,
+          jsonErrors: []
         })
       } else {
         continue;
