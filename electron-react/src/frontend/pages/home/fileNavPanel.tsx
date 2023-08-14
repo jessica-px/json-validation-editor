@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { FileExplorer }from './fileExplorer/fileExplorer';
-import { selectors } from '@redux/dirDataSlice';
+import { dirDataSelectors } from '@redux/dirDataSlice';
 import { useAppSelector } from '@redux/hooks';
 
 const FileNavPanelStyle = styled.div`
@@ -26,7 +26,7 @@ type FileNavPanelProps = {
 }
 
 export const FileNavPanel = (props: FileNavPanelProps) => {
-  const topLevelItems = useAppSelector(selectors.selectAllItemsAtPath(props.jsonDirectoryPath))
+  const topLevelItems = useAppSelector(dirDataSelectors.selectAllItemsAtPath(props.jsonDirectoryPath))
 
   return (
     <FileNavPanelStyle>

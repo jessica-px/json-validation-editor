@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { selectors } from '@redux/dirDataSlice';
+import { dirDataSelectors } from '@redux/dirDataSlice';
 import { useAppSelector } from '@redux/hooks'
 import { DirectoryItem } from "@shared/types";
 import { FileButton } from './components/fileButton';
@@ -33,7 +33,7 @@ export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
               />
             );
           } else {
-            const children = useAppSelector(state => selectors.selectAllChildren(state, dirItem.path))
+            const children = useAppSelector(state => dirDataSelectors.selectAllChildren(state, dirItem.path))
 
             return (
               <DirectoryButton

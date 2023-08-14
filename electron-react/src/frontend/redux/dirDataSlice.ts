@@ -8,26 +8,12 @@ export const dirItemsAdaptor = createEntityAdapter<DirectoryItem>({
   sortComparer: (a, b) => b.name.localeCompare(a.name)
 })
 
-type OtherStateValues = {
-  selectedFile: string,
-  selectedLineNumber: number | null
-}
-
-const initialState = dirItemsAdaptor.getInitialState<OtherStateValues>({
-  selectedFile: '',
-  selectedLineNumber: null
-})
+const initialState = dirItemsAdaptor.getInitialState();
 
 const dirDataSlice = createSlice({
   name: 'dirData',
   initialState,
   reducers: {
-    setSelectedFile(state, action: PayloadAction<string>) {
-      state.selectedFile = action.payload;
-    },
-    setSelectedLineNumber(state, action: PayloadAction<number>) {
-      state.selectedLineNumber = action.payload;
-    },
     addOne(state, action: PayloadAction<DirectoryItem>) {
       const dirItem = action.payload;
       if (dirItem.type === 'file') {
@@ -49,7 +35,7 @@ const dirDataSlice = createSlice({
   }
 })
 
-export const actions = dirDataSlice.actions;
+export const dirDataActions = dirDataSlice.actions;
 
 // Export the customized selectors for this adapter using `getSelectors`
 const {
@@ -91,28 +77,14 @@ const selectAllWithErrors = createSelector(
   }
 )
 
-const selectSelectedFile = (state: RootState): DirFile | null => {
-  const selectedPath = state.dirData.selectedFile;
-  if (!!selectedPath && state.dirData.entities[selectedPath].type === 'file') {
-    return state.dirData.entities[selectedPath] as DirFile;
-  }
-  return null;
-}
-
-const selectSelectedLineNumber = (state: RootState): number | null => {
-  return state.dirData.selectedLineNumber;
-}
-
-export const selectors = {
+export const dirDataSelectors = {
   selectAll,
   selectById,
   selectIds,
   selectFileById,
   selectAllChildren,
   selectAllItemsAtPath,
-  selectAllWithErrors,
-  selectSelectedFile,
-  selectSelectedLineNumber
+  selectAllWithErrors
 }
 
 export default dirDataSlice.reducer

@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import AceEditor from "react-ace";
 import { styled } from 'styled-components';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
-import { actions, selectors } from '@redux/dirDataSlice';
+import { dirDataActions } from '@redux/dirDataSlice';
+import { tabsSelectors } from '@redux/tabsSlice';
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-twilight";
@@ -13,14 +14,16 @@ const JsonPanelStyle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
+  height: calc(100% - 33px); // chrome tabs height
 `
 
 export const JsonPanel = () => {
   const dispatch = useAppDispatch();
   const editorRef = useRef();
 
-  const selectedLineNumber = useAppSelector(selectors.selectSelectedLineNumber)
-  const selectedFile = useAppSelector(selectors.selectSelectedFile)
+  const selectedLineNumber = useAppSelector(tabsSelectors.selectSelectedLineNumber)
+  const selectedFile = useAppSelector(tabsSelectors.selectSelectedFile)
 
   useEffect(() => {
     goToLine(selectedLineNumber);
@@ -47,7 +50,7 @@ export const JsonPanel = () => {
   const onChange = (newValue: string) => {
     const oldValue = selectedFile.content;
     if (oldValue !== newValue) {
-      dispatch(actions.updateFile({
+      dispatch(dirDataActions.updateFile({
         path: selectedFile.path,
         newContent: newValue
       }))

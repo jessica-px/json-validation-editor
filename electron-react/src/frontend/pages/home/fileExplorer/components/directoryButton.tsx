@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { styled } from "styled-components";
-import { selectors } from '@redux/dirDataSlice';
+import { tabsSelectors } from '@redux/tabsSlice';
 import { useAppSelector } from '@redux/hooks';
 
 const DirectoryButtonStyle = styled.button<{ indent: number}>`
@@ -37,7 +37,7 @@ export const DirectoryButton = (props: DirectoryButtonProps): React.ReactElement
   const arrow = isOpen ? '▼' : '▶';
   const label = `${arrow} 📁 ${props.directoryName}`;
 
-  const selectedFile = useAppSelector(selectors.selectSelectedFile);
+  const selectedFile = useAppSelector(tabsSelectors.selectSelectedFile);
 
   useEffect(() => {
     if (selectedFile && selectedFile.path.includes(props.path)) {

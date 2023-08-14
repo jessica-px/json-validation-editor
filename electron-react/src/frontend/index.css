@@ -7,8 +7,56 @@ body, html {
   color: #d5d1dd;
 }
 
-/* For use with Ace Editor */
+/* --- Ace Editor Overrides --- */
+
 .error-marker {
   position: absolute;
   background-color: rgb(97, 8, 8);
+}
+
+.ace_gutter {
+  background-color: #1a1625 !important;
+  border-right: 1px solid #46424f;
+}
+
+/* ---Chrome Tabs Overrides --- */
+
+.chrome-tabs .chrome-tab .chrome-tab-title {
+  color: #d5d1dd !important; /* Non-active tab title color */
+}
+
+@media (hover: hover) {
+  .chrome-tabs .chrome-tab .chrome-tab-close:hover, .chrome-tab-close:hover:active {
+    background-color: rgb(192, 17, 17) !important; /* Close button bg color (hover) */
+  }
+}
+
+.chrome-tabs {
+  height: 32px !important;
+  padding-top: 4px !important;
+  background: #46424f !important; /* Tray bg color, behind all tabs */
+  border-radius: 0 !important;
+}
+
+.chrome-tabs .chrome-tab {
+  height: 32px !important;
+}
+
+.chrome-tabs .chrome-tab .chrome-tab-dividers {
+  position: absolute;
+  top: 3px !important;
+  bottom: 3px !important;
+}
+
+.chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-geometry {
+  fill: #1a1625 !important; /* Tab bg color */
+}
+
+.chrome-tab-close {
+  background-color: gray;
+}
+
+.chrome-tab-dividers::after, .chrome-tab-dividers::before {
+  top: 5px !important;
+  background: #675f6b !important;
 }

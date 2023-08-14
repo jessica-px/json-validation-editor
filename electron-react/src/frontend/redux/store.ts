@@ -1,8 +1,10 @@
 import { configureStore, combineReducers, PreloadedState } from '@reduxjs/toolkit'
-import dirDataSlice from './dirDataSlice'
+import dirDataSlice from './dirDataSlice';
+import tabsSlice from './tabsSlice';
 
 const rootReducer = combineReducers({
-  dirData: dirDataSlice
+  dirData: dirDataSlice,
+  tabs: tabsSlice
 })
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

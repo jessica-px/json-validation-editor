@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { JsonError } from '@shared/validateJson/validateJson';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
-import { selectors, actions } from '@redux/dirDataSlice';
+import { dirDataSelectors } from '@redux/dirDataSlice';
+import { tabsActions } from '@redux/tabsSlice';
 
 const WarningPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
@@ -91,7 +92,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
   const symbol = isOpen ? '▼' : '▶';
 
   const setSelectedLineNumber = (lineNumber: number) => {
-    dispatch(actions.setSelectedLineNumber(lineNumber))
+    dispatch(tabsActions.setSelectedLineNumber(lineNumber))
   }
 
   return (
@@ -109,7 +110,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
           message={error.message}
           onClick={() => {
             setSelectedLineNumber(error.lineNumber + 1);
-            dispatch(actions.setSelectedFile(filePath))
+            dispatch(tabsActions.setSelectedFile(filePath))
           }}
         />
       ))}
@@ -119,7 +120,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
 
 export const WarningPanel = () => {
   const [numErrors, setNumErrors] = useState<number>(0);
-  const filesWithErrors = useAppSelector(selectors.selectAllWithErrors);
+  const filesWithErrors = useAppSelector(dirDataSelectors.selectAllWithErrors);
 
   useEffect(() => {
     let numErrorsFound = 0;

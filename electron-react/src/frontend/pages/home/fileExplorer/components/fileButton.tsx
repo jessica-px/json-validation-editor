@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { styled } from "styled-components";
-import { actions, selectors } from '@redux/dirDataSlice';
+import { dirDataSelectors } from '@redux/dirDataSlice';
+import { tabsActions, tabsSelectors } from '@redux/tabsSlice';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
 
 const FileButtonStyle = styled.button<{ selected: boolean, indent: number}>`
@@ -24,8 +25,8 @@ type FileButtonProps = {
 export const FileButton = (props: FileButtonProps) => {
   const dispatch = useAppDispatch();
   const [buttonLabel, setButtonLabel] = useState('');
-  const selectedFile = useAppSelector(selectors.selectSelectedFile);
-  const fileData = useAppSelector((state) => selectors.selectFileById(state, props.path));
+  const selectedFile = useAppSelector(tabsSelectors.selectSelectedFile);
+  const fileData = useAppSelector((state) => dirDataSelectors.selectFileById(state, props.path));
   const isSelected = selectedFile && selectedFile.path === props.path;
 
   // whenever file updates, check to see if we should add/remove button * to show changes
@@ -38,7 +39,7 @@ export const FileButton = (props: FileButtonProps) => {
     <FileButtonStyle
       indent={props.indent}
       selected={isSelected}
-      onClick={() => dispatch(actions.setSelectedFile(props.path))}
+      onClick={() => dispatch(tabsActions.setSelectedFile(props.path))}
     >
       {buttonLabel}
     </FileButtonStyle>
