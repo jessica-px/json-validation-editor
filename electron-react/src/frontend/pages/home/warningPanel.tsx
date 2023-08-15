@@ -150,24 +150,24 @@ export const WarningPanel = () => {
     setNumErrors(numErrorsFound);
   }, [filesWithErrors])
 
+  const sortedFiles = filesWithErrors
+    .filter(file => (file.jsonErrors.length > 0))
+    .sort((a, b ) => a.name.localeCompare(b.name));
+
   return (
     <WarningPanelWrapper>
       <WarningPanelDraggableHeader/>
       <WarningPanelStyle>
         <PanelHeader>Total Errors: {numErrors}</PanelHeader>
         <FileInfoWrapper>
-          {filesWithErrors
-            .filter(file => (
-              file.jsonErrors.length > 0
-            )).map(file => (
-              <FileInfo
-                key={file.path}
-                fileName={file.name}
-                filePath={file.path}
-                errors={file.jsonErrors}
-              />
-            ))
-          }
+          {sortedFiles.map(file => (
+            <FileInfo
+              key={file.path}
+              fileName={file.name}
+              filePath={file.path}
+              errors={file.jsonErrors}
+            />
+          ))}
         </FileInfoWrapper>
       </WarningPanelStyle>
     </WarningPanelWrapper>
