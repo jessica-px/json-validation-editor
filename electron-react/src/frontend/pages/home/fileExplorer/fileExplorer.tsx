@@ -14,13 +14,28 @@ type FileExplorerProps = {
   contents: DirectoryItem[]
 };
 
+const getTypeSortValue = (dirItem1: DirectoryItem, dirItem2: DirectoryItem): number => {
+  if (dirItem1.type === 'dir' && dirItem2.type === 'file') {
+    return -1;
+  } else if (dirItem1.type === 'file' && dirItem2.type === 'dir') {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 export const FileExplorer = (props: FileExplorerProps): React.ReactElement => {
   const indentAmount = 10;
+  const sortedContents = props.contents.sort((a, b) => {
+    const alphaSortValue = a.name.localeCompare(b.name);
+    const typeSortValue = getTypeSortValue(a, b);
+    return typeSortValue || alphaSortValue;
+  })
 
   return (
     <FileExplorerContainer>
       {
-        !!props.contents && props.contents.map(dirItem => {
+        !!sortedContents && sortedContents.map(dirItem => {
 
           if (!dirItem) {
             return;
