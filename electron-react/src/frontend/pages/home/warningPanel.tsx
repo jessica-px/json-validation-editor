@@ -5,21 +5,37 @@ import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { dirDataSelectors } from '@redux/dirDataSlice';
 import { tabsActions } from '@redux/tabsSlice';
 
+const WarningPanelWrapper = styled.div`
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+`
+
+const WarningPanelDraggableHeader = styled.div`
+  background-color: ${(props) => props.theme.dark300};
+  height: ${(props) => props.theme.titleBarHeight};
+  width: 100%;
+  -webkit-app-region: drag;
+`;
+
 const WarningPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
-  border-right: 1px ${(props) => props.theme.dark300} solid;
+  border-left: 1px ${(props) => props.theme.dark300} solid;
   display: flex;
   flex-direction: column;
   gap: 2px;
   width: 230px;
-  padding: 12px;
+  flex: 1;
   font-size: ${(props) => props.theme.fontSizeSmall};
   overflow: scroll;
 `;
 
 const PanelHeader = styled.h4`
+  position: sticky;
+  top: 0;
+  background-color: ${(props) => props.theme.dark200};
   color: ${(props) => props.theme.primaryLight};
-  padding: 8px 16px;
+  padding: 12px 28px;
   margin: 0;
 `
 
@@ -36,7 +52,11 @@ const FileButton = styled.button`
   }
 `
 
-const FileInfoContainter = styled.div`
+const FileInfoWrapper = styled.div`
+  padding: 0 12px 12px 12px;
+`
+
+const FileInfoStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -96,7 +116,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
   }
 
   return (
-    <FileInfoContainter>
+    <FileInfoStyle>
       <FileButton
         key={fileName}
         onClick={() => setIsOpen(!isOpen)}
@@ -114,7 +134,7 @@ const FileInfo = ({ fileName, filePath, errors }: FileInfoProps) => {
           }}
         />
       ))}
-    </FileInfoContainter>
+    </FileInfoStyle>
   )
 }
 
@@ -131,20 +151,25 @@ export const WarningPanel = () => {
   }, [filesWithErrors])
 
   return (
-    <WarningPanelStyle>
-      <PanelHeader>Total Errors: {numErrors}</PanelHeader>
-      {filesWithErrors
-        .filter(file => (
-          file.jsonErrors.length > 0
-        )).map(file => (
-          <FileInfo
-            key={file.path}
-            fileName={file.name}
-            filePath={file.path}
-            errors={file.jsonErrors}
-          />
-        ))
-      }
-    </WarningPanelStyle>
+    <WarningPanelWrapper>
+      <WarningPanelDraggableHeader/>
+      <WarningPanelStyle>
+        <PanelHeader>Total Errors: {numErrors}</PanelHeader>
+        <FileInfoWrapper>
+          {filesWithErrors
+            .filter(file => (
+              file.jsonErrors.length > 0
+            )).map(file => (
+              <FileInfo
+                key={file.path}
+                fileName={file.name}
+                filePath={file.path}
+                errors={file.jsonErrors}
+              />
+            ))
+          }
+        </FileInfoWrapper>
+      </WarningPanelStyle>
+    </WarningPanelWrapper>
   )
 }

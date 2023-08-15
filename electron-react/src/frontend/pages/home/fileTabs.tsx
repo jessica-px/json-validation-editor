@@ -1,7 +1,13 @@
 import { Tabs } from "@sinm/react-chrome-tabs";
+import { styled } from 'styled-components';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { tabsSelectors, tabsActions } from '@redux/tabsSlice';
 import '@sinm/react-chrome-tabs/css/chrome-tabs.css';
+
+const DraggableTray = styled.div`
+  width: 100%;
+  -webkit-app-region: drag;
+`;
 
 export const FileTabTray = () => {
   const dispatch = useAppDispatch();
@@ -20,11 +26,13 @@ export const FileTabTray = () => {
   }
 
   return (
-    <Tabs
-      onTabClose={onClose}
-      onTabReorder={onReorder}
-      onTabActive={onSelect}
-      tabs={tabs}
-    ></Tabs>
+    <DraggableTray>
+      <Tabs
+        onTabClose={onClose}
+        onTabReorder={onReorder}
+        onTabActive={onSelect}
+        tabs={tabs}
+      ></Tabs>
+    </DraggableTray>
   );
 }

@@ -14,7 +14,8 @@ const theme = {
   primary: '#9171f8',
   primaryLight: '#ba9ffb',
   fontSizeSmall: '12px',
-  fontSizeMed: '16px'
+  fontSizeMed: '16px',
+  titleBarHeight: '32px'
 };
 
 const App = () => (

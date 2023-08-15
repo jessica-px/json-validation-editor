@@ -8,22 +8,15 @@ import { WarningPanel } from './warningPanel';
 import { JsonPanel } from './jsonPanel';
 import { FileTabTray } from './fileTabs';
 
-const TitleBar = styled.div`
-  width: 100%;
-  height: 30px;
-  background-color: ${(props) => props.theme.dark100};
-  -webkit-app-region: drag;
-`;
-
 const Layout = styled.div`
   display: flex;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
 `
 
 const Panels = styled.div`
   display: flex;
-  max-height: calc(100vh - 30px);
+  height: 100%;
   flex-direction: row;
 `
 
@@ -52,7 +45,6 @@ export const HomePage = () => {
 
   return (
     <Layout>
-      <TitleBar />
       <Panels>
         <FileNavPanel jsonDirectoryPath={jsonDirectoryPath} />
         <FilePanelStyle>

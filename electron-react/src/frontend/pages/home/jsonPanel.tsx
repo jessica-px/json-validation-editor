@@ -15,7 +15,7 @@ const JsonPanelStyle = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: calc(100% - 33px); // chrome tabs height
+  height: calc(100% - ${(props) => props.theme.titleBarHeight});
 `
 
 export const JsonPanel = () => {

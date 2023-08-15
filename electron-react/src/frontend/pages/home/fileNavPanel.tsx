@@ -3,10 +3,24 @@ import { FileExplorer }from './fileExplorer/fileExplorer';
 import { dirDataSelectors } from '@redux/dirDataSlice';
 import { useAppSelector } from '@redux/hooks';
 
+const FileNavPanelWrapper = styled.div`
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+`
+
+const FileNavPanelDraggableHeader = styled.div`
+  background-color: ${(props) => props.theme.dark300};
+  height: ${(props) => props.theme.titleBarHeight};
+  width: 100%;
+  -webkit-app-region: drag;
+`;
+
 const FileNavPanelStyle = styled.div`
   background-color: ${(props) => props.theme.dark200};
   border-right: 1px ${(props) => props.theme.dark300} solid;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 2px;
   width: 230px;
@@ -29,9 +43,12 @@ export const FileNavPanel = (props: FileNavPanelProps) => {
   const topLevelItems = useAppSelector(dirDataSelectors.selectAllItemsAtPath(props.jsonDirectoryPath))
 
   return (
-    <FileNavPanelStyle>
-      <ListHeader>my-jsons</ListHeader>
-      <FileExplorer contents={topLevelItems} />
-    </FileNavPanelStyle>
+    <FileNavPanelWrapper>
+      <FileNavPanelDraggableHeader/>
+      <FileNavPanelStyle>
+        <ListHeader>my-jsons</ListHeader>
+        <FileExplorer contents={topLevelItems} />
+      </FileNavPanelStyle>
+    </FileNavPanelWrapper>
   )
 }
