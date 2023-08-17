@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { dirDataActions } from '@redux/dirDataSlice';
 import { tabsSelectors } from '@redux/tabsSlice';
+import { DirFile } from '@shared/types';
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-twilight";
@@ -17,6 +18,31 @@ const JsonPanelStyle = styled.div`
   width: 100%;
   height: calc(100% - ${(props) => props.theme.titleBarHeight});
 `
+
+const FileStickyHeaderStyle = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  position: sticky;
+  width: 100%;
+  box-sizing: border-box;
+  height: 28px;
+  background-color: ${(props) => props.theme.dark100};
+  font-size: ${(props) => props.theme.fontSizeSmall};
+  color: ${(props) => props.theme.dark500};
+`
+
+type FileStickyHeaderProps = {
+  file: DirFile;
+}
+
+const FileStickyHeader = (props: FileStickyHeaderProps) => {
+  const breadcrumbs = props.file.path.replaceAll('/', ' > ');
+
+  return (
+    <FileStickyHeaderStyle>{breadcrumbs}</FileStickyHeaderStyle>
+  )
+}
 
 export const JsonPanel = () => {
   const dispatch = useAppDispatch();
@@ -67,29 +93,32 @@ export const JsonPanel = () => {
     <JsonPanelStyle>
       {!selectedFile && <div>Select a file</div>}
       {!!selectedFile && (
-        <AceEditor
-          mode="java"
-          ref={editorRef}
-          theme="twilight"
-          onChange={onChange}
-          debounceChangePeriod={500}
-          name="ace-editor"
-          editorProps={{ $blockScrolling: true }}
-          value={selectedFile.content}
-          width='100%'
-          height='100%'
-          focus={true}
-          cursorStart={5}
-          wrapEnabled={true}
-          setOptions={{
-            placeholder: "This file is empty!"
-          }}
-          style={{
-            backgroundColor: '#1a1625'
-          }}
-          annotations={errorsToAnnotations()}
-          markers={errorsToMarkers() as any}
-        />
+        <>
+          <FileStickyHeader file={selectedFile}/>
+          <AceEditor
+            mode="java"
+            ref={editorRef}
+            theme="twilight"
+            onChange={onChange}
+            debounceChangePeriod={500}
+            name="ace-editor"
+            editorProps={{ $blockScrolling: true }}
+            value={selectedFile.content}
+            width='100%'
+            height='100%'
+            focus={true}
+            cursorStart={5}
+            wrapEnabled={true}
+            setOptions={{
+              placeholder: "This file is empty!"
+            }}
+            style={{
+              backgroundColor: '#1a1625'
+            }}
+            annotations={errorsToAnnotations()}
+            markers={errorsToMarkers() as any}
+          />
+        </>
       )}
     </JsonPanelStyle>
   )

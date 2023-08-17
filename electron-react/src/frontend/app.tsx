@@ -9,7 +9,7 @@ const theme = {
   dark200: '#25222e', // For cards background color
   dark300: '#46424f', // For chips, buttons, dropdowns background color
   dark400: '##5e5a66', // For sidebars, navbar background color
-  dark500: '#76737e', // For modal, dialogs background color
+  dark500: '#a5a2af', // For modal, dialogs background color
   dark600: '#d5d1dd', // For on-background text color
   primary: '#9171f8',
   primaryLight: '#ba9ffb',
