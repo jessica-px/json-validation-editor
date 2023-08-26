@@ -1,5 +1,5 @@
 import { dialog, IpcMainInvokeEvent } from 'electron';
-import { DirectoryItem } from '@shared/types';
+import { ApiResponse, DirectoryItem } from '@shared/types';
 import { promises as fsp } from 'fs';
 
 export async function openFile () {
@@ -9,10 +9,39 @@ export async function openFile () {
   }
 }
 
-export async function selectDirectory () {
+export async function saveFile(_: IpcMainInvokeEvent, ...args: string[]): Promise<ApiResponse> {
+  const path = args[0];
+  const fileContent = args[1];
+
+  try {
+    await fsp.writeFile(path, fileContent, 'utf-8');
+    const res: ApiResponse = {
+      success: true,
+      body: path
+    };
+    return res;
+  }
+  catch(error) {
+    const res: ApiResponse = {
+      success: false,
+      message: error
+    };
+    return res;
+  }
+}
+
+export async function selectDirectory(): Promise<ApiResponse> {
   const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openDirectory'] })
   if (!canceled) {
-    return filePaths[0]
+    return {
+      success: true,
+      body: filePaths[0]
+    }
+  } else {
+    return {
+      success: false,
+      message: 'Dialog was canceled'
+    }
   }
 }
 
@@ -22,7 +51,7 @@ export type FileReturnType = {
   content: string
 }
 
-export const getDirData = async (_: IpcMainInvokeEvent, ...args: string[]): Promise<DirectoryItem[]> => {
+export const getDirData = async (_: IpcMainInvokeEvent, ...args: string[]): Promise<ApiResponse> => {
   const directoryName = args[0];
 
   const recursiveGetFilesInDir = async (dirName: string): Promise<DirectoryItem[]> => {
@@ -67,6 +96,16 @@ export const getDirData = async (_: IpcMainInvokeEvent, ...args: string[]): Prom
     return files;
   }
 
-  const fileNames = await recursiveGetFilesInDir(directoryName);
-  return fileNames;
+  try {
+    const fileNames = await recursiveGetFilesInDir(directoryName);
+    return {
+      success: true,
+      body: fileNames
+    };
+  } catch(error) {
+    return {
+      success: false,
+      message: error
+    };
+  }
 };

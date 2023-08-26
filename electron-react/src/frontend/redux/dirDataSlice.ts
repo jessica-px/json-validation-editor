@@ -22,16 +22,19 @@ const dirDataSlice = createSlice({
 
       dirItemsAdaptor.addOne(state, dirItem);
     },
-    updateFile(state, action: PayloadAction<{path: string, newContent: string}>) {
-      const { path, newContent } = action.payload
+    updateFile(state, action: PayloadAction<{path: string, newContent: string, updateDiskContent: boolean}>) {
+      const { path, newContent, updateDiskContent } = action.payload
       const existingDirItem = state.entities[path]
       if (existingDirItem && existingDirItem.type === 'file') {
         const newJsonErrors = getJsonErrors(newContent);
 
         existingDirItem.content = newContent
         existingDirItem.jsonErrors = newJsonErrors
+        if (updateDiskContent) {
+          existingDirItem.contentOnDisk = newContent;
+        }
       }
-    }
+    },
   }
 })
 

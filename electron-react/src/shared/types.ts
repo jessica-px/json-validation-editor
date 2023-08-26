@@ -21,3 +21,15 @@ export type DirectoryItem = Directory | DirFile;
 export type HierarchicalFileData = {
   [key: string]: string | HierarchicalFileData
 }
+
+export type ApiResponseSuccess = {
+  success: true,
+  body: any
+}
+
+export type ApiResponseError = {
+  success: false,
+  message: string
+}
+
+export type ApiResponse = ApiResponseSuccess | ApiResponseError;

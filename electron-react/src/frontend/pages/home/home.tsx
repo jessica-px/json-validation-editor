@@ -36,9 +36,12 @@ export const HomePage = () => {
 
   useEffect(() => {
     electronApi.getDirData(jsonDirectoryPath)
-      .then((returnedDirItems: DirectoryItem[]) => {
+      .then((res) => {
+        if (res.success) {
+          const returnedDirItems: DirectoryItem[] = res.body;
+          returnedDirItems.forEach(item => dispatch(dirDataActions.addOne(item)));
+        }
         // upgrade this to an "addMany" action, for performance
-        returnedDirItems.forEach(item => dispatch(dirDataActions.addOne(item)))
       });
 
   }, []);

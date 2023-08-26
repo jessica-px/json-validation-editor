@@ -21,6 +21,7 @@ const JsonPanelStyle = styled.div`
 
 const FileStickyHeaderStyle = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 12px;
   position: sticky;
@@ -37,10 +38,26 @@ type FileStickyHeaderProps = {
 }
 
 const FileStickyHeader = (props: FileStickyHeaderProps) => {
+  const dispatch = useAppDispatch();
   const breadcrumbs = props.file.path.replaceAll('/', ' > ');
+  const hasChanges = props.file.content !== props.file.contentOnDisk;
+
+  const onSave = async () => {
+    const res = await electronApi.saveFile(props.file.path, props.file.content);
+    if (res.success) {
+      dispatch(dirDataActions.updateFile({
+        path: props.file.path,
+        newContent: props.file.content,
+        updateDiskContent: true
+      }))
+    }
+  }
 
   return (
-    <FileStickyHeaderStyle>{breadcrumbs}</FileStickyHeaderStyle>
+    <FileStickyHeaderStyle>
+      {breadcrumbs}
+      {hasChanges && <button onClick={onSave}>Save</button>}
+    </FileStickyHeaderStyle>
   )
 }
 
@@ -78,7 +95,8 @@ export const JsonPanel = () => {
     if (oldValue !== newValue) {
       dispatch(dirDataActions.updateFile({
         path: selectedFile.path,
-        newContent: newValue
+        newContent: newValue,
+        updateDiskContent: false
       }))
     }
   }
