@@ -8,12 +8,22 @@ export const dirItemsAdaptor = createEntityAdapter<DirectoryItem>({
   sortComparer: (a, b) => b.name.localeCompare(a.name)
 })
 
-const initialState = dirItemsAdaptor.getInitialState();
+type OtherStateValues = {
+  directoryPath: string | null
+}
+
+const initialState = dirItemsAdaptor.getInitialState<OtherStateValues>({
+  directoryPath: null
+});
 
 const dirDataSlice = createSlice({
   name: 'dirData',
   initialState,
   reducers: {
+    setDirectoryPath(state, action: PayloadAction<string>) {
+      const dirPath = action.payload;
+      state.directoryPath = dirPath;
+    },
     addOne(state, action: PayloadAction<DirectoryItem>) {
       const dirItem = action.payload;
       if (dirItem.type === 'file') {
@@ -80,6 +90,10 @@ const selectAllWithErrors = createSelector(
   }
 )
 
+const selectDirectoryPath = (state: RootState): string | null => {
+  return state.dirData.directoryPath;
+}
+
 export const dirDataSelectors = {
   selectAll,
   selectById,
@@ -87,7 +101,8 @@ export const dirDataSelectors = {
   selectFileById,
   selectAllChildren,
   selectAllItemsAtPath,
-  selectAllWithErrors
+  selectAllWithErrors,
+  selectDirectoryPath
 }
 
 export default dirDataSlice.reducer

@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux'
-import { ProjectPage } from './pages/project/project';
+import { PageWrapper } from './pages/pageWrapper';
 import { setupStore } from './redux/store'
 
 const theme = {
@@ -21,7 +21,7 @@ const theme = {
 const App = () => (
   <Provider store={setupStore()}>
     <ThemeProvider theme={theme}>
-      <ProjectPage />
+      <PageWrapper />
     </ThemeProvider>
   </Provider>
 )
