@@ -3,10 +3,10 @@ import { styled } from 'styled-components';
 import { useDispatch } from 'react-redux'
 import { DirectoryItem } from '@shared/types';
 import { dirDataActions } from '@redux/dirDataSlice';
-import { FileNavPanel } from './fileNavPanel';
-import { WarningPanel } from './warningPanel';
-import { JsonPanel } from './jsonPanel';
-import { FileTabTray } from './fileTabs';
+import { FileNavPanel } from './components/fileNavPanel';
+import { WarningPanel } from './components/warningPanel';
+import { JsonPanel } from './components/jsonPanel';
+import { FileTabTray } from './components/fileTabs';
 
 const Layout = styled.div`
   display: flex;
