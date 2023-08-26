@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux'
-import { HomePage } from './pages/home/home';
+import { ProjectPage } from './pages/project/project';
 import { setupStore } from './redux/store'
 
 const theme = {
@@ -21,7 +21,7 @@ const theme = {
 const App = () => (
   <Provider store={setupStore()}>
     <ThemeProvider theme={theme}>
-      <HomePage />
+      <ProjectPage />
     </ThemeProvider>
   </Provider>
 )

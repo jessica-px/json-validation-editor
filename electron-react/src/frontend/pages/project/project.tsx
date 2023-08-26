@@ -30,7 +30,7 @@ const FilePanelStyle = styled.div`
   width: 100%;
 `
 
-export const HomePage = () => {
+export const ProjectPage = () => {
   const dispatch = useDispatch();
   const [jsonDirectoryPath] = useState('/Users/themanager/Desktop/jsons');
 
