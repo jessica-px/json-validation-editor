@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { styled } from 'styled-components';
-import { useDispatch } from 'react-redux'
+import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { DirectoryItem } from '@shared/types';
-import { dirDataActions } from '@redux/dirDataSlice';
+import { dirDataActions, dirDataSelectors } from '@redux/dirDataSlice';
 import { FileNavPanel } from './components/fileNavPanel';
 import { WarningPanel } from './components/warningPanel';
 import { JsonPanel } from './components/jsonPanel';
@@ -31,11 +31,11 @@ const FilePanelStyle = styled.div`
 `
 
 export const ProjectPage = () => {
-  const dispatch = useDispatch();
-  const [jsonDirectoryPath] = useState('/Users/themanager/Desktop/jsons');
+  const dispatch = useAppDispatch();
+  const directoryPath = useAppSelector(dirDataSelectors.selectDirectoryPath);
 
   useEffect(() => {
-    electronApi.getDirData(jsonDirectoryPath)
+    electronApi.getDirData(directoryPath)
       .then((res) => {
         if (res.success) {
           const returnedDirItems: DirectoryItem[] = res.body;
@@ -49,7 +49,7 @@ export const ProjectPage = () => {
   return (
     <Layout>
       <Panels>
-        <FileNavPanel jsonDirectoryPath={jsonDirectoryPath} />
+        <FileNavPanel />
         <FilePanelStyle>
           <FileTabTray />
           <JsonPanel />

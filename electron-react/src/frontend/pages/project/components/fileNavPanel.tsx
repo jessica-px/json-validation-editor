@@ -35,18 +35,16 @@ const ListHeader = styled.h4`
   margin: 0;
 `
 
-type FileNavPanelProps = {
-  jsonDirectoryPath: string
-}
-
-export const FileNavPanel = (props: FileNavPanelProps) => {
-  const topLevelItems = useAppSelector(dirDataSelectors.selectAllItemsAtPath(props.jsonDirectoryPath))
+export const FileNavPanel = () => {
+  const directoryPath = useAppSelector(dirDataSelectors.selectDirectoryPath);
+  const topLevelItems = useAppSelector(dirDataSelectors.selectAllItemsAtPath(directoryPath));
+  const directoryName = directoryPath.split('/').pop();
 
   return (
     <FileNavPanelWrapper>
       <FileNavPanelDraggableHeader/>
       <FileNavPanelStyle>
-        <ListHeader>my-jsons</ListHeader>
+        <ListHeader>{directoryName}</ListHeader>
         <FileExplorer contents={topLevelItems} />
       </FileNavPanelStyle>
     </FileNavPanelWrapper>

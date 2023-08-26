@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import AceEditor from "react-ace";
 import { styled } from 'styled-components';
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
-import { dirDataActions } from '@redux/dirDataSlice';
+import { dirDataActions, dirDataSelectors } from '@redux/dirDataSlice';
 import { tabsSelectors } from '@redux/tabsSlice';
 import { DirFile } from '@shared/types';
 
@@ -39,7 +39,13 @@ type FileStickyHeaderProps = {
 
 const FileStickyHeader = (props: FileStickyHeaderProps) => {
   const dispatch = useAppDispatch();
-  const breadcrumbs = props.file.path.replaceAll('/', ' > ');
+  const directoryPath = useAppSelector(dirDataSelectors.selectDirectoryPath);
+
+  const rootPath = directoryPath.split('/').slice(0, -1).join('/');
+  const relativePath = props.file.path.replace(rootPath, '');
+  const cleanedPath = relativePath.replace(/^\//, '');
+  const breadcrumbs = cleanedPath.replaceAll('/', ' > ');
+
   const hasChanges = props.file.content !== props.file.contentOnDisk;
 
   const onSave = async () => {
