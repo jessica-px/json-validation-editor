@@ -64,7 +64,7 @@ const FileInfoStyle = styled.div`
 
 const ErrorTextMessage = styled.div`
   text-align: left;
-  color: #ee6e6e;
+  color: ${(props) => props.theme.errorRed};
 `
 
 const ErrorTextLineNumber = styled.div`

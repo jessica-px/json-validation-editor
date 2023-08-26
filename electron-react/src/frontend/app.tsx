@@ -13,6 +13,7 @@ const theme = {
   dark600: '#d5d1dd', // For on-background text color
   primary: '#9171f8',
   primaryLight: '#ba9ffb',
+  errorRed: '#f87575',
   fontSizeSmall: '12px',
   fontSizeMed: '16px',
   titleBarHeight: '32px'
