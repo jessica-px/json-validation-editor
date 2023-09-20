@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import { styled } from "styled-components";
 import { tabsSelectors } from '@redux/tabsSlice';
 import { useAppSelector } from '@redux/hooks';
+import { dirDataSelectors } from '@redux/dirDataSlice';
 
-const DirectoryButtonStyle = styled.button<{ indent: number}>`
-  color: ${(props) => props.theme.dark600};
+const DirectoryButtonStyle = styled.button<{ indent: number, hasErrors: boolean}>`
+  color: ${(props) => props.hasErrors ? props.theme.errorRed : props.theme.dark600};
   text-align: left;
   border: none;
   border-radius: 5px;
   margin: 0;
   padding: 4px;
   background-color: ${(props) => props.theme.dark200};
-  color: ${(props) => props.theme.dark600};
   font-weight: "bold";
-
   &:hover {
     background-color: ${(props) => props.theme.dark300};
   }
@@ -38,6 +37,8 @@ export const DirectoryButton = (props: DirectoryButtonProps): React.ReactElement
   const label = `${arrow} 📁 ${props.directoryName}`;
 
   const selectedFile = useAppSelector(tabsSelectors.selectSelectedFile);
+  const filesWithErrors = useAppSelector(dirDataSelectors.selectAllWithErrors);
+  const hasErrors = filesWithErrors.some((dirFile) => dirFile.path.includes(props.path));
 
   useEffect(() => {
     if (selectedFile && selectedFile.path.includes(props.path)) {
@@ -49,6 +50,7 @@ export const DirectoryButton = (props: DirectoryButtonProps): React.ReactElement
     <>
       <DirectoryButtonStyle
         indent={props.indent}
+        hasErrors={hasErrors}
         onClick={() => setIsOpen(!isOpen)}
       >
         {label}
